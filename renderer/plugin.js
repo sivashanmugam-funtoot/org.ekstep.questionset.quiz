@@ -2,6 +2,7 @@ Plugin.extend({
   _type: 'org.ekstep.questionset.quiz',
   _isContainer: true,
   _render: true,
+  _currentQuestionState: undefined,
   _pluginConfig: {},
   _pluginData: {},
   _pluginAttributes: {},
@@ -94,7 +95,7 @@ Plugin.extend({
     embedData["var-item"] = this._pluginConfig.var || "item";
     // this.setState('mcq', undefined, false);
     PluginManager.invoke('embed', embedData, this, this._stage, this._theme);
-    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);// eslint-disable-line no-undef
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
   },
   initquestionnaire: function () {
     var controllerName = "item";
@@ -123,8 +124,7 @@ Plugin.extend({
       // Override the 'resetItem' function for rendering the V1 templates. This is to ensure that the saved
       // question states are not reset by the controller. This will not affect the rendering because
       // we always render only one question in one instance of 'questionset.quiz'
-      this._stage._stageController.resetItem = function () {
-      };
+      this._stage._stageController.resetItem = function () {};
       this._stage._stageController.next();
       var stageKey = this._stage.getStagestateKey();
 
@@ -163,13 +163,16 @@ Plugin.extend({
     }
     result.values = result.res;
     result.eval = result.pass;
+
+    result.state = {};
+    result.state.val = result.res;
     // result.eval = res.pass;
     // result.score = res.score;
     // result.res = res.res;
     if (_.isFunction(callback)) {
       callback(result);
     }
-    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);// eslint-disable-line no-undef
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result); // eslint-disable-line no-undef
   },
   /*getStates: function(questionId) {
       var qState;

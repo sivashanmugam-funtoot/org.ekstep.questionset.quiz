@@ -2,7 +2,6 @@ Plugin.extend({
   _type: 'org.ekstep.questionset.quiz',
   _isContainer: true,
   _render: true,
-  _currentQuestionState: undefined,
   _pluginConfig: {},
   _pluginData: {},
   _pluginAttributes: {},
